@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IP API de Pedro</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin-top: 15px;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 8px;
+      text-align: center;
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+    button {
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1>IP API de Pedro</h1>
+
+  <form id="Form_ip">
+    <input type="text" id="Input_ip" placeholder="Digita aí Autoridade!" autofocus>
+    <button type="submit">Consultar</button>
+  </form>
+
+  <table>
+    <thead>
+      <tr>
+        <th>IP</th>
+        <th>Proveniente da Organização</th>
+        <th>País</th>
+        <th>Cidade</th>
+        <th>Remover</th>
+      </tr>
+    </thead>
+    <tbody id="Table_ip"></tbody>
+  </table>
+
+  <script>
+    const form = document.getElementById('Form_ip');
+    const input = document.getElementById('Input_ip');
+    const tbody = document.getElementById('Table_ip');
+    const api = 'https://ipinfo.io/';  
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const ip = input.value.trim();
+
+   
+      if (!ip) {
+      alert('Digita o IP Aí AUTORIDADE!');
+      return;
+      }
+
+      try {
+        const response = await fetch(`${api}${ip}/json`);
+        const data = await response.json();
+
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${data.ip}</td>
+          <td>${data.org}</td>
+          <td>${data.country}</td>
+          <td>${data.city}</td>
+          <td><button onclick="this.closest('tr').remove()">🗑️</button></td>
+        `;
+
+        tbody.appendChild(row);
+      } 
+      catch (error) {
+        console.error('Erro:', error);
+        alert('Meu Patrão, aqui é só IP da Menina Garota Internet!');
+      }
+
+      form.reset();
+      input.focus();
+    });
+  </script>
+</body>
+</html>
